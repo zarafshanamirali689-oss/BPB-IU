@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>💦 Made by Amir</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#080a10;color:#e8eaf2;min-height:100vh;direction:rtl;position:relative;overflow-x:hidden;transition:background .3s,color .3s}
+body.light{background:#f4f6fb;color:#1a1f2e}
+
+.glow1{position:fixed;top:-15%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(79,142,247,.1) 0%,transparent 65%);pointer-events:none;z-index:0}
+.glow2{position:fixed;bottom:0;right:5%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(124,92,252,.07) 0%,transparent 65%);pointer-events:none;z-index:0}
+body.light .glow1{background:radial-gradient(ellipse,rgba(79,142,247,.08) 0%,transparent 65%)}
+body.light .glow2{background:radial-gradient(ellipse,rgba(124,92,252,.06) 0%,transparent 65%)}
+.container{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:2rem 1rem 5rem}
+
+.top-bar{display:flex;justify-content:flex-end;margin-bottom:.5rem}
+.theme-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:99px;color:#a8c8ff;font-size:.78rem;font-weight:600;padding:.4rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .2s;font-family:inherit}
+body.light .theme-btn{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);color:#4f8ef7}
+
+.header{text-align:center;margin-bottom:1.3rem}
+.logo-box{display:inline-flex;align-items:center;justify-content:center;width:68px;height:68px;border-radius:20px;background:linear-gradient(135deg,rgba(79,142,247,.25),rgba(124,92,252,.25));border:1px solid rgba(79,142,247,.35);font-size:2.1rem;margin-bottom:.9rem;box-shadow:0 0 40px rgba(79,142,247,.2)}
+h1{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#a8c8ff,#c4b0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.03em}
+.sub-status{color:#4a5270;font-size:.82rem;margin-top:.35rem;letter-spacing:.05em;display:inline-flex;align-items:center;gap:.35rem}
+body.light .sub-status{color:#6b7290}
+.dot{width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 6px rgba(52,211,153,.7)}
+.dot.loading{background:#fbbf24;animation:pulse 1s infinite}
+.dot.error{background:#f87171}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.update-row{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.7rem;color:#3a4260;margin-top:.5rem}
+body.light .update-row{color:#8088a0}
+.refresh-btn{background:none;border:none;color:#6aa3ff;cursor:pointer;font-size:.75rem;display:inline-flex;align-items:center;gap:.25rem;font-family:inherit;padding:.15rem .4rem;border-radius:6px;transition:all .15s}
+.refresh-btn:hover{background:rgba(79,142,247,.12)}
+.refresh-btn.spinning{animation:spin .7s linear}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.banner{display:none;border-radius:12px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.74rem;line-height:1.6}
+.banner.show{display:block}
+.banner.warn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35);color:#fbbf24}
+.banner.error{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.35);color:#f87171}
+
+.skeleton{background:rgba(255,255,255,.04);border-radius:8px;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%,100%{opacity:.4}50%{opacity:.8}}
+
+.usage-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.1rem 1.3rem;margin-bottom:1rem}
+body.light .usage-card{background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.usage-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.6rem}
+.usage-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5270}
+body.light .usage-title{color:#8088a0}
+.usage-nums{font-size:.78rem;color:#8090b0;font-weight:600}
+.usage-nums b{color:#a8c8ff;font-weight:800}
+body.light .usage-nums b{color:#4f8ef7}
+.usage-bar-track{width:100%;height:9px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+body.light .usage-bar-track{background:rgba(0,0,0,.06)}
+.usage-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4f8ef7,#7c5cfc);transition:width .5s ease}
+.usage-bar-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.usage-bar-fill.danger{background:linear-gradient(90deg,#f87171,#ef4444)}
+.usage-bottom{display:flex;justify-content:space-between;margin-top:.6rem;font-size:.68rem;color:#3a4260}
+body.light .usage-bottom{color:#9098b0}
+
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.7rem;text-align:center}
+body.light .stat-box{background:rgba(0,0,0,.025);border:1px solid rgba(0,0,0,.06)}
+.stat-num{font-size:1.1rem;font-weight:800;color:#a8c8ff}
+body.light .stat-num{color:#4f8ef7}
+.stat-label{font-size:.62rem;color:#4a5270;margin-top:.15rem;letter-spacing:.04em}
+body.light .stat-label{color:#8088a0}
+
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1rem 1.2rem;margin-bottom:1rem}
+body.light .card{background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a5270;margin-bottom:.6rem;display:flex;align-items:center;justify-content:space-between}
+body.light .label{color:#8088a0}
+.link-row{display:flex;gap:.6rem;align-items:center}
+.link-box{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:.5rem .75rem;font-size:.7rem;color:#4a5580;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;font-family:monospace;cursor:text;user-select:all}
+body.light .link-box{background:rgba(0,0,0,.035);border:1px solid rgba(0,0,0,.06);color:#5a6080}
+.btn-copy{flex-shrink:0;background:linear-gradient(135deg,#4f8ef7,#7c5cfc);border:none;border-radius:9px;color:#fff;font-size:.78rem;font-weight:700;padding:.55rem 1rem;cursor:pointer;transition:all .2s;font-family:inherit;box-shadow:0 4px 16px rgba(79,142,247,.3)}
+.btn-copy.ok{background:linear-gradient(135deg,#34d399,#10b981);color:#052e16;box-shadow:0 4px 16px rgba(52,211,153,.3)}
+.btn-copy.fail{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff}
+
+.tabs{display:flex;gap:.4rem;margin-bottom:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:.3rem;overflow-x:auto}
+body.light .tabs{background:#fff;border:1px solid rgba(0,0,0,.06)}
+.tab-btn{flex:1;background:transparent;border:1px solid transparent;border-radius:9px;color:#4a5270;font-size:.78rem;font-weight:600;padding:.5rem .3rem;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+body.light .tab-btn{color:#8088a0}
+.tab-btn.active{background:linear-gradient(135deg,rgba(79,142,247,.3),rgba(124,92,252,.3));border:1px solid rgba(79,142,247,.3);color:#a8c8ff}
+body.light .tab-btn.active{color:#3a6fd8}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.action-row{display:flex;gap:.5rem;margin-bottom:.8rem}
+.action-btn{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#a8c8ff;font-size:.74rem;font-weight:700;padding:.55rem;cursor:pointer;transition:all .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.35rem}
+body.light .action-btn{background:#fff;border:1px solid rgba(0,0,0,.07);color:#4f8ef7}
+.action-btn:hover{background:rgba(79,142,247,.12)}
+.action-btn.ok{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:#34d399}
+.action-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.filters{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
+.filter-pill{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:99px;color:#4a5270;font-size:.72rem;font-weight:600;padding:.3rem .8rem;cursor:pointer;transition:all .2s;font-family:inherit}
+body.light .filter-pill{background:#fff;border:1px solid rgba(0,0,0,.07);color:#8088a0}
+.filter-pill.active{background:rgba(79,142,247,.2);border:1.5px solid #4f8ef7;color:#a8c8ff;box-shadow:0 0 0 2px rgba(79,142,247,.15)}
+body.light .filter-pill.active{box-shadow:0 0 0 2px rgba(79,142,247,.12)}
+
+.search-box{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.55rem .9rem;color:#e8eaf2;font-size:.78rem;margin-bottom:.7rem;font-family:inherit;direction:rtl}
+body.light .search-box{background:#fff;border:1px solid rgba(0,0,0,.07);color:#1a1f2e}
+.search-box::placeholder{color:#3a4260}
+.search-box:focus{outline:none;border-color:rgba(79,142,247,.4)}
+
+.group-list{display:flex;flex-direction:column;gap:.5rem}
+.group-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;transition:border-color .2s, box-shadow .2s}
+body.light .group-card{background:#fff;border:1px solid rgba(0,0,0,.06)}
+.group-card.expanded{border:1.5px solid #4f8ef7;box-shadow:0 0 0 3px rgba(79,142,247,.12)}
+body.light .group-card.expanded{box-shadow:0 0 0 3px rgba(79,142,247,.1)}
+.group-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;cursor:pointer;user-select:none}
+.group-icon{flex-shrink:0;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:800}
+.group-icon.domain{background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.35);color:#7eb8ff}
+.group-icon.ipv4{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.35);color:#d8a4ff}
+.group-icon.clean{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:#6ee7b7}
+.group-icon.other{background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.3);color:#94a3b8}
+.group-info{flex:1;min-width:0}
+.group-name{font-size:.85rem;font-weight:700;color:#c8d0e8}
+body.light .group-name{color:#1a1f2e}
+.group-meta{font-size:.7rem;color:#4a5270;margin-top:.15rem}
+.group-chevron{flex-shrink:0;color:#4a5270;font-size:.8rem;transition:transform .25s}
+.group-card.expanded .group-chevron{transform:rotate(180deg)}
+
+.group-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.group-card.expanded .group-body{max-height:3000px}
+.group-body-inner{padding:0 1rem 1rem;display:flex;flex-direction:column;gap:.45rem}
+
+.config-row{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);border-radius:11px;padding:.65rem .8rem;display:flex;align-items:center;gap:.6rem}
+body.light .config-row{background:rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.05)}
+.config-num{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#5a6080}
+body.light .config-num{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.07)}
+.config-info{flex:1;min-width:0}
+.config-addr{font-size:.72rem;color:#8090b0;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;cursor:text;user-select:all}
+body.light .config-addr{color:#5a6080}
+.config-port{font-size:.62rem;color:#4a5270;margin-top:.1rem}
+.config-actions{display:flex;gap:.3rem;flex-shrink:0;align-items:center}
+.ping-badge{font-size:.62rem;font-weight:700;padding:.18rem .45rem;border-radius:6px;min-width:42px;text-align:center}
+.ping-good{background:rgba(52,211,153,.15);color:#34d399}
+.ping-mid{background:rgba(251,191,36,.15);color:#fbbf24}
+.ping-bad{background:rgba(248,113,113,.15);color:#f87171}
+.ping-wait{background:rgba(255,255,255,.06);color:#5a6080}
+.btn-copy-sm{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);border-radius:7px;color:#6aa3ff;font-size:.68rem;font-weight:700;padding:.32rem .55rem;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-copy-sm.ok{background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.4);color:#34d399}
+.btn-copy-sm.fail{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);color:#f87171}
+.btn-fav{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#4a5270;font-size:.78rem;padding:.28rem .5rem;cursor:pointer;transition:all .2s}
+.btn-fav.active{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);color:#fbbf24}
+
+.qr-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+body.light .qr-panel{background:#fff;border:1px solid rgba(0,0,0,.06)}
+.qr-box{background:#fff;border-radius:16px;padding:12px;box-shadow:0 0 0 1px rgba(255,255,255,.05),0 12px 40px rgba(0,0,0,.5);line-height:0;width:200px;height:200px;display:flex;align-items:center;justify-content:center}
+.qr-hint{color:#4a5270;font-size:.8rem;text-align:center}
+.btn-dl-qr{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.3);border-radius:10px;color:#a8c8ff;font-size:.78rem;font-weight:700;padding:.55rem 1.2rem;cursor:pointer;font-family:inherit}
+.btn-dl-qr:disabled{opacity:.5;cursor:not-allowed}
+
+.apps-list{display:flex;flex-direction:column;gap:.6rem}
+.app-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1rem 1.1rem;transition:all .2s}
+body.light .app-card{background:#fff;border:1px solid rgba(0,0,0,.06)}
+.app-card-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+.app-icon{font-size:1.5rem}
+.app-name{font-size:.9rem;font-weight:700;color:#c8d0e8}
+body.light .app-name{color:#1a1f2e}
+.app-desc{font-size:.7rem;color:#4a5270;margin-top:.1rem}
+.app-btn-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.app-link-btn{flex:1;min-width:90px;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4rem;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.3);border-radius:9px;color:#a8c8ff;text-decoration:none;font-size:.74rem;font-weight:700;padding:.5rem .7rem;transition:all .2s}
+.app-link-btn:hover{background:rgba(79,142,247,.2)}
+.app-link-btn.import{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#6ee7b7}
+.app-link-btn.import:hover{background:rgba(52,211,153,.2)}
+
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(60px);opacity:0;background:linear-gradient(135deg,#34d399,#10b981);color:#052e16;font-weight:700;font-size:.82rem;padding:.6rem 1.5rem;border-radius:99px;white-space:nowrap;z-index:999;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px rgba(52,211,153,.35);pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.fail{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff;box-shadow:0 8px 24px rgba(248,113,113,.35)}
+
+@media(max-width:420px){.stats-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="glow1"></div>
+<div class="glow2"></div>
+
+<div class="container">
+
+  <div class="top-bar">
+    <button class="theme-btn" id="theme-btn" onclick="App.toggleTheme()">🌙 تاریک</button>
+  </div>
+
+  <div class="header">
+    <div class="logo-box">💦</div>
+    <h1>Made by Amir</h1>
+    <p class="sub-status"><span class="dot loading" id="status-dot"></span><span id="config-count">در حال بارگذاری…</span></p>
+    <div class="update-row">
+      <span id="last-update">در حال دریافت کانفیگ‌ها...</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="App.refresh()">↻ بروزرسانی</button>
+    </div>
+  </div>
+
+  <div class="banner warn" id="banner-warn"></div>
+  <div class="banner error" id="banner-error"></div>
+
+  <div class="usage-card">
+    <div class="usage-top">
+      <span class="usage-title">مقدار مصرف</span>
+      <span class="usage-nums"><b id="usage-used">--</b> GB از <b id="usage-total">--</b> GB</span>
+    </div>
+    <div class="usage-bar-track"><div class="usage-bar-fill" id="usage-bar" style="width:0%"></div></div>
+    <div class="usage-bottom">
+      <span id="usage-remaining">--</span>
+      <span id="usage-expiry">--</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" id="stat-total">--</div><div class="stat-label">کل کانفیگ</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-clean">--</div><div class="stat-label">Clean IP</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-ports">--</div><div class="stat-label">پورت</div></div>
+  </div>
+
+  <div class="card">
+    <div class="label">لینک اشتراک</div>
+    <div class="link-row">
+      <div class="link-box" id="sub-link" ondblclick="App.selectText(this)"></div>
+      <button class="btn-copy" id="copy-sub-btn" onclick="App.copySub()">کپی</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="configs" onclick="App.switchTab('configs')">کانفیگ‌ها</button>
+    <button class="tab-btn" data-tab="qr" onclick="App.switchTab('qr')">QR Code</button>
+    <button class="tab-btn" data-tab="apps" onclick="App.switchTab('apps')">دانلود اپ</button>
+  </div>
+
+  <div class="tab-panel active" id="panel-configs">
+    <div class="action-row">
+      <button class="action-btn" id="ping-all-btn" onclick="App.pingAll()">📶 تست پینگ همه</button>
+      <button class="action-btn" id="copy-all-btn" onclick="App.copyAll()">📋 کپی همه</button>
+    </div>
+    <input type="text" class="search-box" id="search-box" placeholder="جستجوی آدرس یا نوع کانفیگ..." oninput="App.renderGroups()">
+    <div class="filters" id="filters"></div>
+    <div class="group-list" id="group-list"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-qr">
+    <div class="qr-panel">
+      <div class="qr-box" id="qr"></div>
+      <p class="qr-hint" id="qr-hint">در حال آماده‌سازی QR Code...</p>
+      <button class="btn-dl-qr" id="dl-qr-btn" onclick="App.downloadQR()" disabled>⬇ دانلود تصویر QR</button>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="panel-apps">
+    <div class="apps-list" id="apps-list"></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   App: fetches the subscription live, decodes configs, renders UI.
+   Designed to be served from an http(s) origin (e.g. Cloudflare
+   Pages) — NOT opened via file:// — so fetch()/clipboard work.
+   ================================================================ */
+const App = (() => {
+
+  // ---- CONFIG: put your BPB subscription link here ----
+  const SUB_URL = "https://broken-violet-56ff.shntyagshtasby37.workers.dev/sub/normal/SP9MGomefBURESFP?app=xray";
+  // If your panel exposes usage via a JSON status endpoint, set it here (optional).
+  // Leave as null to keep the usage card in manual/placeholder mode.
+  const USAGE_ENDPOINT = null; // e.g. "https://your-panel/api/user-info?token=..."
+
+  const AUTO_REFRESH_MINUTES = 10; // re-fetch configs automatically every N minutes
+
+  const GROUP_META = {
+    "Domain":   {icon:"🌐", cls:"domain", label:"Domain — دامنه"},
+    "IPv4":     {icon:"🔢", cls:"ipv4",   label:"IPv4 — آی‌پی مستقیم"},
+    "Clean IP": {icon:"✨", cls:"clean",  label:"Clean IP — آی‌پی پاک"},
+    "Other":    {icon:"🔗", cls:"other",  label:"سایر"},
+  };
+
+  const APPS = [
+    {name:"v2rayNG", icon:"🟢", desc:"اندروید · رایگان و متن‌باز",
+     importScheme:"v2rayng://install-sub?url=",
+     downloadUrl:"https://github.com/2dust/v2rayNG/releases/latest"},
+    {name:"Hiddify", icon:"🔵", desc:"اندروید / ویندوز / مک / لینوکس",
+     importScheme:"hiddify://import/",
+     downloadUrl:"https://github.com/hiddify/hiddify-app/releases/latest"},
+    {name:"NekoRay", icon:"🐱", desc:"ویندوز / لینوکس",
+     importScheme:"nekoray://import?url=",
+     downloadUrl:"https://github.com/MatsuriDayo/nekoray/releases/latest"},
+    {name:"Streisand", icon:"⚡", desc:"iOS / مک",
+     importScheme:"streisand://import?url=",
+     downloadUrl:"https://apps.apple.com/app/streisand/id6450534064"},
+  ];
+
+  // ---- state ----
+  let CONFIGS = [];           // [{id, raw, type, addr, port, remark}]
+  let favorites = new Set();
+  let pingResults = {};
+  let currentFilter = "All";
+  let expandedGroups = new Set();
+  let qrMade = false;
+  let lastFetchOk = false;
+
+  // ================= Utilities =================
+  function $(id){ return document.getElementById(id); }
+
+  function showToast(msg, fail){
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.toggle('fail', !!fail);
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2400);
+  }
+
+  function selectText(el){
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function robustCopy(text){
+    return new Promise((resolve) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(()=>resolve(true)).catch(()=>resolve(fallbackCopy(text)));
+      } else {
+        resolve(fallbackCopy(text));
+      }
+    });
+  }
+  function fallbackCopy(text){
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e){ return false; }
+  }
+
+  function formatTime(d){ return d.toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit'}); }
+
+  function setStatus(state, text){
+    // state: 'loading' | 'ok' | 'error'
+    const dot = $('status-dot');
+    dot.className = 'dot' + (state === 'loading' ? ' loading' : state === 'error' ? ' error' : '');
+    $('config-count').textContent = text;
+  }
+
+  function showBanner(kind, msg){
+    const el = $('banner-' + kind);
+    if(!msg){ el.classList.remove('show'); el.textContent=''; return; }
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  // ================= Fetch & parse subscription =================
+  // The sub link can return either:
+  //  a) base64-encoded text of raw config lines (vless://, vmess://, ss://, trojan://) separated by \n
+  //  b) a JSON array of xray client configs (BPB "app=xray" style) — has remarks + outbounds[0]
+  async function fetchSubscription(){
+    setStatus('loading', 'در حال بارگذاری…');
+    $('last-update').textContent = 'در حال دریافت کانفیگ‌ها...';
+    showBanner('warn', '');
+    showBanner('error', '');
+
+    try {
+      const res = await fetch(SUB_URL, { cache: 'no-store' });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const configs = parseSubscriptionText(text);
+      if(configs.length === 0) throw new Error('هیچ کانفیگی در پاسخ سرور پیدا نشد');
+
+      CONFIGS = configs;
+      lastFetchOk = true;
+      onConfigsLoaded();
+    } catch(err) {
+      lastFetchOk = false;
+      setStatus('error', 'خطا در بارگذاری');
+      $('last-update').textContent = 'آخرین تلاش: ' + formatTime(new Date());
+      showBanner('error', '⚠️ اتصال به لینک ساب ناموفق بود (' + (err.message || err) + '). ممکن است به‌خاطر CORS باشد — اگر این فایل را به‌صورت محلی (دوبار کلیک) باز کرده‌اید، باید آن را روی یک هاست آنلاین (Cloudflare Pages) قرار دهید.');
+      // keep previous CONFIGS if we have them; otherwise render empty state
+      if(CONFIGS.length === 0){
+        $('group-list').innerHTML = `<div style="text-align:center;color:#4a5270;font-size:.8rem;padding:2rem 0">کانفیگی برای نمایش وجود ندارد</div>`;
+      }
+    }
+  }
+
+  function parseSubscriptionText(text){
+    const trimmed = text.trim();
+
+    // Try JSON array (xray client config style)
+    if(trimmed.startsWith('[')){
+      try {
+        const arr = JSON.parse(trimmed);
+        return arr.map((item, idx) => parseXrayJsonItem(item, idx)).filter(Boolean);
+      } catch(e){ /* fall through */ }
+    }
+
+    // Try base64 decode -> line-separated config URIs
+    let decoded = trimmed;
+    if(!/^(vless|vmess|ss|trojan):\/\//.test(trimmed)){
+      try {
+        decoded = atob(trimmed.replace(/\s/g,''));
+      } catch(e){ decoded = trimmed; }
+    }
+    const lines = decoded.split('\n').map(l=>l.trim()).filter(Boolean);
+    return lines.map((line, idx) => parseConfigLine(line, idx)).filter(Boolean);
+  }
+
+  function parseXrayJsonItem(item, idx){
+    try {
+      const ob = (item.outbounds || []).find(o => o.protocol === 'vless' || o.protocol === 'vmess' || o.protocol === 'trojan' || o.protocol === 'shadowsocks');
+      if(!ob) return null;
+      const vnext = (ob.settings && ob.settings.vnext && ob.settings.vnext[0]) || {};
+      const addr = vnext.address || '';
+      const port = vnext.port || 0;
+      const remark = item.remarks || ('Config ' + (idx+1));
+      const type = classifyAddr(addr, remark);
+      // Build a vless:// link if we have enough info (best-effort reconstruction)
+      let raw = null;
+      const user = (vnext.users && vnext.users[0]) || {};
+      if(ob.protocol === 'vless' && user.id){
+        const ss = (ob.streamSettings || {});
+        const ws = ss.wsSettings || {};
+        const tls = ss.tlsSettings || {};
+        const params = new URLSearchParams();
+        params.set('encryption', user.encryption || 'none');
+        if(ss.security) params.set('security', ss.security);
+        if(ss.network) params.set('type', ss.network);
+        if(ws.host) params.set('host', ws.host);
+        if(ws.path) params.set('path', ws.path);
+        if(tls.serverName) params.set('sni', tls.serverName);
+        if(tls.fingerprint) params.set('fp', tls.fingerprint);
+        raw = `vless://${user.id}@${addr}:${port}?${params.toString()}#${encodeURIComponent(remark)}`;
+      }
+      return { id: idx+1, raw, type, addr, port, remark };
+    } catch(e){ return null; }
+  }
+
+  function parseConfigLine(line, idx){
+    try {
+      const protoMatch = line.match(/^(vless|vmess|ss|trojan):\/\//);
+      if(!protoMatch) return null;
+      const proto = protoMatch[1];
+      let addr = '', port = 0, remark = 'Config ' + (idx+1);
+
+      if(proto === 'vmess'){
+        const b64 = line.replace('vmess://','');
+        const json = JSON.parse(atob(b64));
+        addr = json.add || '';
+        port = parseInt(json.port) || 0;
+        remark = json.ps || remark;
+      } else {
+        // vless / trojan / ss share a similar URI shape: proto://user@host:port?query#remark
+        const afterProto = line.replace(protoMatch[0], '');
+        const hashIdx = afterProto.indexOf('#');
+        const beforeHash = hashIdx >= 0 ? afterProto.slice(0, hashIdx) : afterProto;
+        const hashPart = hashIdx >= 0 ? afterProto.slice(hashIdx+1) : '';
+        if(hashPart) { try { remark = decodeURIComponent(hashPart); } catch(e){ remark = hashPart; } }
+
+        const atIdx = beforeHash.lastIndexOf('@');
+        const hostPort = atIdx >= 0 ? beforeHash.slice(atIdx+1).split('?')[0] : beforeHash.split('?')[0];
+        const lastColon = hostPort.lastIndexOf(':');
+        if(lastColon > -1){
+          addr = hostPort.slice(0, lastColon);
+          port = parseInt(hostPort.slice(lastColon+1)) || 0;
+        } else {
+          addr = hostPort;
+        }
+      }
+
+      const type = classifyAddr(addr, remark);
+      return { id: idx+1, raw: line, type, addr, port, remark };
+    } catch(e){ return null; }
+  }
+
+  function classifyAddr(addr, remark){
+    const r = (remark || '').toLowerCase();
+    if(r.includes('clean')) return 'Clean IP';
+    if(r.includes('domain')) return 'Domain';
+    if(r.includes('ipv4') || r.includes('ipv6')) return 'IPv4';
+    const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(addr) || addr.includes(':') && !addr.includes('.');
+    if(isIp) return 'IPv4';
+    if(addr) return 'Domain';
+    return 'Other';
+  }
+
+  // ================= Render: header / stats / usage =================
+  function onConfigsLoaded(){
+    setStatus('ok', CONFIGS.length + ' کانفیگ فعال · بارگذاری‌شده از لینک ساب');
+    $('last-update').textContent = 'آخرین بروزرسانی: امروز ساعت ' + formatTime(new Date());
+    $('sub-link').textContent = SUB_URL;
+
+    const cleanCount = CONFIGS.filter(c=>c.type==='Clean IP').length;
+    const ports = [...new Set(CONFIGS.map(c=>c.port).filter(Boolean))];
+    $('stat-total').textContent = CONFIGS.length;
+    $('stat-clean').textContent = cleanCount;
+    $('stat-ports').textContent = ports.length;
+
+    renderUsage();
+    renderFilters();
+    renderGroups();
+    renderApps();
+    pingResults = {}; // reset ping results on reload
+  }
+
+  // Placeholder usage (manual) — auto-fills from USAGE_ENDPOINT if provided & reachable
+  const MANUAL_USAGE = { usedGB: 12.4, totalGB: 50, expiryDays: 30 };
+  async function renderUsage(){
+    let usage = MANUAL_USAGE;
+    if(USAGE_ENDPOINT){
+      try {
+        const res = await fetch(USAGE_ENDPOINT, { cache: 'no-store' });
+        if(res.ok){
+          const data = await res.json();
+          if(data && typeof data.usedGB === 'number' && typeof data.totalGB === 'number'){
+            usage = data;
+          }
+        }
+      } catch(e){ /* fall back to manual */ }
+    }
+    const pct = Math.min(100, Math.round((usage.usedGB / usage.totalGB) * 100));
+    $('usage-used').textContent = usage.usedGB;
+    $('usage-total').textContent = usage.totalGB;
+    $('usage-remaining').textContent = (usage.totalGB - usage.usedGB).toFixed(1) + ' GB باقی‌مانده';
+    $('usage-expiry').textContent = usage.expiryDays != null ? ('انقضا: ' + usage.expiryDays + ' روز دیگر') : '';
+    const bar = $('usage-bar');
+    bar.style.width = pct + '%';
+    bar.className = 'usage-bar-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+  }
+
+  // ================= Copy =================
+  function copySub(){
+    robustCopy(SUB_URL).then(ok=>{
+      const b = $('copy-sub-btn');
+      if(ok){ b.textContent='✓ کپی شد'; b.classList.add('ok'); showToast('✓ لینک کپی شد'); }
+      else { b.textContent='دوبار کلیک کن'; b.classList.add('fail'); selectText($('sub-link')); showToast('کپی خودکار ناموفق — متن انتخاب شد', true); }
+      setTimeout(()=>{ b.textContent='کپی'; b.classList.remove('ok','fail'); }, 2600);
+    });
+  }
+
+  function copyConfig(id, btnId){
+    const cfg = CONFIGS.find(c=>c.id===id);
+    if(!cfg){ showToast('کانفیگ پیدا نشد', true); return; }
+    // Copy the FULL raw config URI (vless://...) — this is what v2rayNG/Hiddify need to import.
+    const textToCopy = cfg.raw || (cfg.addr + ':' + cfg.port);
+    robustCopy(textToCopy).then(ok=>{
+      const b = $(btnId);
+      if(ok){ b.textContent='✓'; b.classList.add('ok'); showToast('✓ کانفیگ کامل کپی شد — آماده Import در v2rayNG'); }
+      else {
+        b.textContent='✕'; b.classList.add('fail');
+        const addrEl = $('addr-'+btnId);
+        if(addrEl) selectText(addrEl);
+        showToast('کپی خودکار ناموفق — متن انتخاب شد، Ctrl+C بزن', true);
+      }
+      setTimeout(()=>{ b.textContent='کپی'; b.classList.remove('ok','fail'); }, 2600);
+    });
+  }
+
+  function copyAll(){
+    const text = CONFIGS.map(c => c.raw || `${c.addr}:${c.port}`).join('\n');
+    robustCopy(text).then(ok=>{
+      const b = $('copy-all-btn');
+      if(ok){ b.classList.add('ok'); b.textContent='✓ همه کپی شد'; showToast('✓ همه کانفیگ‌ها کپی شدند'); }
+      else { showToast('کپی گروهی ناموفق بود', true); }
+      setTimeout(()=>{ b.classList.remove('ok'); b.textContent='📋 کپی همه'; }, 2200);
+    });
+  }
+
+  // ================= Favorites / Filters =================
+  function toggleFav(id, evt){
+    evt.stopPropagation();
+    const btn = evt.currentTarget;
+    if(favorites.has(id)){ favorites.delete(id); btn.classList.remove('active'); }
+    else { favorites.add(id); btn.classList.add('active'); }
+    renderFilters();
+  }
+
+  function renderFilters(){
+    const typesPresent = [...new Set(CONFIGS.map(c=>c.type))];
+    const types = ["All", ...typesPresent, "⭐"];
+    const wrap = $('filters');
+    wrap.innerHTML = types.map(t=>{
+      let count, label;
+      if(t==="All"){ count = CONFIGS.length; label = `همه (${count})`; }
+      else if(t==="⭐"){ count = favorites.size; label = `⭐ مورد علاقه (${count})`; }
+      else { count = CONFIGS.filter(c=>c.type===t).length; label = `${t} (${count})`; }
+      return `<button class="filter-pill ${t===currentFilter?'active':''}" onclick="App.setFilter('${t}')">${label}</button>`;
+    }).join('');
+  }
+  function setFilter(t){ currentFilter = t; renderFilters(); renderGroups(); }
+
+  // ================= Ping =================
+  function pingHost(addr){
+    return new Promise(resolve=>{
+      const start = performance.now();
+      const img = new Image();
+      const timeout = setTimeout(()=>{ resolve(null); }, 4000);
+      img.onload = img.onerror = ()=>{ clearTimeout(timeout); resolve(Math.round(performance.now() - start)); };
+      img.src = 'https://' + addr + '/favicon.ico?_=' + Date.now();
+    });
+  }
+  async function pingAll(){
+    if(CONFIGS.length === 0){ showToast('ابتدا کانفیگ‌ها را بارگذاری کنید', true); return; }
+    const btn = $('ping-all-btn');
+    btn.textContent = '⏳ در حال تست...';
+    btn.disabled = true;
+    Object.keys(GROUP_META).forEach(t => expandedGroups.add(t));
+    renderGroups();
+
+    const promises = CONFIGS.map(async cfg=>{
+      const ms = await pingHost(cfg.addr);
+      pingResults[cfg.id] = ms;
+      const el = $('ping-'+cfg.id);
+      if(el){
+        if(ms === null){ el.textContent = 'خطا'; el.className = 'ping-badge ping-bad'; }
+        else { el.textContent = ms + 'ms'; el.className = 'ping-badge ' + (ms < 200 ? 'ping-good' : ms < 500 ? 'ping-mid' : 'ping-bad'); }
+      }
+    });
+    await Promise.all(promises);
+    btn.textContent = '📶 تست پینگ همه';
+    btn.disabled = false;
+    showToast('✓ تست پینگ تمام شد');
+  }
+
+  // ================= Groups (accordion) =================
+  function toggleGroup(key){
+    if(expandedGroups.has(key)) expandedGroups.delete(key);
+    else expandedGroups.add(key);
+    renderGroups();
+  }
+
+  function renderGroups(){
+    const q = $('search-box').value.trim().toLowerCase();
+    const presentTypes = [...new Set(CONFIGS.map(c=>c.type))];
+    let groupKeys = (currentFilter === "All" || currentFilter === "⭐") ? presentTypes : [currentFilter];
+
+    const wrap = $('group-list');
+    let html = '';
+    let anyResults = false;
+
+    groupKeys.forEach(key=>{
+      let items = CONFIGS.filter(c=>c.type===key);
+      if(currentFilter === "⭐") items = items.filter(c=>favorites.has(c.id));
+      if(q) items = items.filter(c => c.addr.toLowerCase().includes(q) || c.type.toLowerCase().includes(q) || String(c.port).includes(q) || (c.remark||'').toLowerCase().includes(q));
+      if(items.length === 0) return;
+      anyResults = true;
+
+      const meta = GROUP_META[key] || GROUP_META["Other"];
+      const isOpen = expandedGroups.has(key);
+      const portsSet = [...new Set(items.map(i=>i.port))].sort((a,b)=>a-b).join(', ');
+
+      html += `
+      <div class="group-card ${isOpen?'expanded':''}">
+        <div class="group-header" onclick="App.toggleGroup('${key}')">
+          <div class="group-icon ${meta.cls}">${meta.icon}</div>
+          <div class="group-info">
+            <div class="group-name">${meta.label}</div>
+            <div class="group-meta">${items.length} کانفیگ · پورت ${portsSet}</div>
+          </div>
+          <div class="group-chevron">▾</div>
+        </div>
+        <div class="group-body">
+          <div class="group-body-inner">
+            ${items.map(cfg=>{
+              const btnId = 'copy-cfg-'+cfg.id;
+              const addrId = 'addr-'+btnId;
+              const isFav = favorites.has(cfg.id);
+              const pr = pingResults[cfg.id];
+              let pingHtml;
+              if(pr === undefined) pingHtml = `<span class="ping-badge ping-wait" id="ping-${cfg.id}">--</span>`;
+              else if(pr === null) pingHtml = `<span class="ping-badge ping-bad" id="ping-${cfg.id}">خطا</span>`;
+              else pingHtml = `<span class="ping-badge ${pr<200?'ping-good':pr<500?'ping-mid':'ping-bad'}" id="ping-${cfg.id}">${pr}ms</span>`;
+              return `
+              <div class="config-row">
+                <div class="config-num">${cfg.id}</div>
+                <div class="config-info">
+                  <div class="config-addr" id="${addrId}" ondblclick="App.selectText(this)">${cfg.addr}</div>
+                  <div class="config-port">پورت ${cfg.port}${cfg.remark ? ' · ' + cfg.remark : ''}</div>
+                </div>
+                <div class="config-actions">
+                  ${pingHtml}
+                  <button class="btn-fav ${isFav?'active':''}" onclick="App.toggleFav(${cfg.id}, event)" title="مورد علاقه">★</button>
+                  <button class="btn-copy-sm" id="${btnId}" onclick="App.copyConfig(${cfg.id}, '${btnId}')">کپی</button>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>`;
+    });
+
+    if(!anyResults){
+      html = `<div style="text-align:center;color:#4a5270;font-size:.8rem;padding:2rem 0">چیزی پیدا نشد</div>`;
+    }
+    wrap.innerHTML = html;
+  }
+
+  // ================= Apps =================
+  function renderApps(){
+    const wrap = $('apps-list');
+    wrap.innerHTML = APPS.map(app=>`
+      <div class="app-card">
+        <div class="app-card-top">
+          <span class="app-icon">${app.icon}</span>
+          <div>
+            <div class="app-name">${app.name}</div>
+            <div class="app-desc">${app.desc}</div>
+          </div>
+        </div>
+        <div class="app-btn-row">
+          <a class="app-link-btn" href="${app.downloadUrl}" target="_blank" rel="noopener">⬇ دانلود اپ</a>
+          <a class="app-link-btn import" href="${app.importScheme}${encodeURIComponent(SUB_URL)}">📥 افزودن خودکار</a>
+        </div>
+      </div>`).join('');
+  }
+
+  // ================= Tabs / QR =================
+  function switchTab(tab){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    $('panel-'+tab).classList.add('active');
+    if(tab==='qr') ensureQR();
+  }
+
+  function ensureQR(){
+    if(qrMade) return;
+    const box = $('qr');
+    box.innerHTML = '';
+    try {
+      new QRCode(box, {
+        text: SUB_URL, width:200, height:200,
+        colorDark:"#080a10", colorLight:"#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      // QRCode.js renders synchronously into a canvas/table — verify it actually landed.
+      requestAnimationFrame(() => {
+        const canvas = box.querySelector('canvas');
+        if(canvas){
+          qrMade = true;
+          $('qr-hint').textContent = 'با اپ خود اسکن کنید تا اشتراک به‌طور خودکار اضافه شود';
+          $('dl-qr-btn').disabled = false;
+        } else {
+          $('qr-hint').textContent = 'خطا در ساخت QR Code — دوباره تلاش کنید';
+        }
+      });
+    } catch(e){
+      $('qr-hint').textContent = 'خطا در ساخت QR Code';
+    }
+  }
+
+  function downloadQR(){
+    const canvas = document.querySelector('#qr canvas');
+    if(!canvas){ showToast('QR هنوز آماده نیست، چند لحظه صبر کنید', true); return; }
+    const link = document.createElement('a');
+    link.download = 'bpb-sub-qr.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  // ================= Theme =================
+  function toggleTheme(){
+    const body = document.body;
+    const btn = $('theme-btn');
+    body.classList.toggle('light');
+    btn.textContent = body.classList.contains('light') ? '☀️ روشن' : '🌙 تاریک';
+  }
+
+  // ================= Refresh (manual + auto) =================
+  function refresh(){
+    const btn = $('refresh-btn');
+    btn.classList.add('spinning');
+    fetchSubscription().finally(()=>{
+      btn.classList.remove('spinning');
+      if(lastFetchOk) showToast('✓ کانفیگ‌ها به‌روزرسانی شدند');
+    });
+  }
+
+  function init(){
+    fetchSubscription();
+    setInterval(fetchSubscription, AUTO_REFRESH_MINUTES * 60 * 1000);
+  }
+
+  return {
+    init, toggleTheme, refresh, switchTab, copySub, copyConfig, copyAll,
+    toggleFav, setFilter, toggleGroup, pingAll, downloadQR, selectText
+  };
+})();
+
+document.addEventListener('DOMContentLoaded', App.init);
+</script>
+</body>
+</html>
